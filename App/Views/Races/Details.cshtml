@@ -1,0 +1,95 @@
+﻿@model App.Models.DatabaseModels.Race
+
+@{
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+	<h4>Race</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Lattitude)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Lattitude)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Longitude)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Longitude)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.EventDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.EventDate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Image)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Image)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.MaxParticipants)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.MaxParticipants)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.MinAge)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.MinAge)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.AllowedCategories)
+		</dt>
+		<dd class="col-sm-10">
+			@foreach (var category in Model.AllowedCategories)
+			{
+				@Html.DisplayFor(model => category.Name)
+				<br />
+			}
+		</dd>
+	</dl>
+	<div id="dvMap" style="width: 500px; height: 500px"></div>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTJ9fmoHrp6XfjOkT2qMaXDY-5w5XXWs0"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			var mapOptions = {
+				center: new google.maps.LatLng(@Model.Lattitude, @Model.Longitude),
+				zoom: 10,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var infoWindow = new google.maps.InfoWindow();
+			var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(@Model.Lattitude, @Model.Longitude),
+				map: map,
+				title: "@Model.Name"
+			});
+			google.maps.event.addListener(marker, "click", function (e) {
+				infoWindow.setContent("@Model.Name");
+				infoWindow.open(map, marker);
+			});
+		}
+	</script>
+</div>
+
+<div>
+	<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+	<a asp-action="Index">Retour à la liste</a> |
+	<a asp-action="Participate" asp-route-id="@Model?.Id">Inscrivez-vous à la course</a>
+</div>

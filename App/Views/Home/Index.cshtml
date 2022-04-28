@@ -1,0 +1,82 @@
+﻿@model App.Models.ViewModels.Home.IndexModel
+
+@{
+	ViewData["Title"] = "Home Page";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+<div class=text-center>
+	<img src="https://i.imgur.com/ceuY4Cv.jpg" class="rounded w-75 pb-3"/>
+</div>
+
+	<div id="carousel" class="carousel slide pb-3" data-bs-ride="carousel">
+		<div class="carousel-inner">
+			@for (int i = 0; i < Model.NextRaces.Count; i++)
+			{
+				var race = Model.NextRaces.ElementAt(i);
+				<div class="carousel-item @(i == 0 ? "active" : "")">
+					<img src="@race.Image" class="d-block w-100" />
+					<div class="carousel-caption">
+						<h2>@race.Name</h2>
+					</div>
+				</div>
+				}
+		</div>
+
+		<!-- Controls -->
+		<button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		</button>
+	</div>
+}
+
+<div class="text-center pb-3">
+	@if (Model.NextRaces.Count > 0)
+	{
+		var next = @Model.NextRaces.FirstOrDefault();
+		<p class="h1">Prochaine course : @next!.Name le @next!.EventDate.ToShortDateString() à @next!.EventDate.TimeOfDay</p>
+	}
+	else
+	{
+		<p class="h1 text-capitalize">Pas de Course Planifié Pour le Moment !</p>
+	}
+</div>
+
+@if (Model.LastRaceResult.Count != 0)
+{
+	<p>Results for @Model.LastRaceResult.FirstOrDefault()!.Race.Name :</p>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Position
+				</th>
+				<th>
+					Driver
+				</th>
+				<th>
+					Vehicule
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var result in Model.LastRaceResult)
+			{
+				<tr>
+					<td>
+						@result.Position
+					</td>
+					<td>
+						@string.Format("{0} {1}", result.Driver.FirstName, result.Driver.LastName)
+					</td>
+					<td>
+						<a asp-action="Details" asp-controller="Vehicules" asp-route-id="@result.Vehicule.Id">@string.Format("{0} {1}", result.Vehicule.Brand, result.Vehicule.Model)</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
