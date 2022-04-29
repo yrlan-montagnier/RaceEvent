@@ -57,8 +57,8 @@ public class Race
     #endregion
 
     #region Race Vehicules
-    [Required(ErrorMessage = "Les catégories de véhicules autorisés requit.")]
-    [Display(Name = "Catégories de véhicules autorisées")]
+    [Required(ErrorMessage = "Catégorie de véhicules autorisés.")]
+    [Display(Name = "Catégorie de véhicules autorisés")]
     public virtual List<Vehicule.AvailableCategory> AllowedCategories { get; set; }
     #endregion
 }
